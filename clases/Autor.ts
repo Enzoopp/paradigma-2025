@@ -2,7 +2,7 @@ export class Autor {
   constructor(
     private _nombre: string,
     private _biografia: string,
-    private _anoNacimiento: number
+    private _añoNacimiento: number
   ) {}
 
   get nombre(): string {
@@ -13,7 +13,7 @@ export class Autor {
     return this._biografia;
   }
   
-  get anoNacimiento(): number {
-    return this._anoNacimiento;
+  get añoNacimiento(): number {
+    return this._añoNacimiento;
   }
 }
