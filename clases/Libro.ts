@@ -29,4 +29,5 @@ export class Libro {
   quitarPrimeraReserva(): Socio | undefined {
     return this._reservas.shift();
   }
+  //hola
 }
