@@ -15,8 +15,8 @@ export class Biblioteca {
   private DURACION = 14; // Los libros se prestan por 2 semanas, se puede cambiar
 
   // funciones para manejar autores
-  agregarAutor(nombre: string, biografia: string, anoNacimiento: number): Autor {
-    const autorCreado = new Autor(nombre, biografia, anoNacimiento);
+  agregarAutor(nombre: string, biografia: string, añoNacimiento: number): Autor {
+    const autorCreado = new Autor(nombre, biografia, añoNacimiento);
     this.autores.push(autorCreado);
     return autorCreado;
   }
