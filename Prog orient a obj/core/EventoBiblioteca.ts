@@ -1,10 +1,10 @@
-import { SocioRegular } from "../usuarios/SocioRegular";
+import { Usuario } from "../usuarios/Usuario";
 
 /**
  * se maneja todos los eventos que organizamos en la biblioteca
  */
 export class EventoBiblioteca {
-  private _participantes: SocioRegular[] = [];
+  private _participantes: Usuario[] = [];
 
   constructor(
     private _nombre: string,
@@ -24,12 +24,12 @@ export class EventoBiblioteca {
     return this._descripcion;
   }
 
-  get participantes(): SocioRegular[] {
+  get participantes(): Usuario[] {
     return this._participantes;
   }
 
   // Inscribimos gente a los eventos
-  agregarParticipante(socio: SocioRegular): void {
+  agregarParticipante(socio: Usuario): void {
     if (!this._participantes.includes(socio)) {
       this._participantes.push(socio);
       console.log(`${socio.nombreCompleto} ya esta anotado/a en "${this.nombre}"`);
@@ -38,7 +38,7 @@ export class EventoBiblioteca {
     }
   }
 
-  // Mandamos avisos a todos los participantes
+  //avisos a todos los participantes
   notificarParticipantes(mensaje: string): void {
     console.log(`\nAviso importante sobre "${this.nombre}":`);
     this._participantes.forEach(socio => {
