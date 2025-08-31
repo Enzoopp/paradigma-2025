@@ -15,12 +15,13 @@ import { CatalogoBiblioteca } from "./busquedas/CatalogoBiblioteca";
 import { BibliotecaDigital } from "./busquedas/BibliotecaDigital";
 import { ArchivoHistorico } from "./busquedas/ArchivoHistorico";
 import { BaseConocimiento } from "./busquedas/BaseConocimineto";
+import { EventoBiblioteca } from "./core/EventoBiblioteca";
 
 export class BibliotecaExtendida {
   private inventario: any[] = [];
   private usuarios: Usuario[] = [];
   private autores: any[] = [];
-  private eventos: any[] = [];
+  private eventos: EventoBiblioteca[] = [];
   private politicaActual: IPoliticaPrestamo;
   private buscadorUniversal: BuscadorUniversal;
 
@@ -82,6 +83,10 @@ export class BibliotecaExtendida {
       throw new Error("Usuario o libro no encontrado");
     }
 
+    if (!usuario.puedeRetirar(libro)) {
+        throw new Error(`El usuario ${usuario.nombreCompleto} no puede retirar este libro.`);
+    }
+
     if (!this.politicaActual.puedePrestar(usuario, libro)) {
       throw new Error("La política actual no permite este préstamo");
     }
@@ -114,9 +119,12 @@ export class BibliotecaExtendida {
       return;
     }
 
-    console.log(`\n--- Resultados de búsqueda: ${criterio} = "${valor}" ---`);
+    console.log(`
+--- Resultados de búsqueda: ${criterio} = "${valor}" ---`);
     resultados.forEach(({ sistema, resultados }) => {
-      console.log(`\n${sistema}:`);
+      console.log(`
+${sistema}:
+`);
       resultados.forEach(resultado => {
         console.log(`  - ${resultado.titulo || resultado.nombre || JSON.stringify(resultado)}`);
       });
@@ -135,5 +143,37 @@ export class BibliotecaExtendida {
     const autor = { nombre, biografia, añoNacimiento };
     this.autores.push(autor);
     return autor;
+  }
+
+  // Gestión de Eventos
+  crearEvento(nombre: string, fecha: Date, descripcion: string): EventoBiblioteca {
+    const evento = new EventoBiblioteca(nombre, fecha, descripcion);
+    this.eventos.push(evento);
+    console.log(`
+Evento "${nombre}" creado.`);
+    return evento;
+  }
+
+  inscribirSocioAEvento(socioId: number, eventoNombre: string): void {
+    const socio = this.usuarios.find(u => u.id === socioId);
+    const evento = this.eventos.find(e => e.nombre === eventoNombre);
+
+    if (!socio || !evento) {
+      throw new Error("Socio o evento no encontrado");
+    }
+
+    if (socio instanceof SocioRegular || socio instanceof SocioVIP) {
+      evento.agregarParticipante(socio);
+    } else {
+      console.log(`Lo sentimos, solo los socios regulares y VIP pueden inscribirse a eventos.`);
+    }
+  }
+
+  notificarParticipantes(eventoNombre: string, mensaje: string): void {
+    const evento = this.eventos.find(e => e.nombre === eventoNombre);
+    if (!evento) {
+      throw new Error("Evento no encontrado");
+    }
+    evento.notificarParticipantes(mensaje);
   }
 }
