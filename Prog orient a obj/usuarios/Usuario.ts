@@ -18,7 +18,7 @@ export abstract class Usuario {
 
     abstract get limitePrestamos(): number;
     abstract get periodoBasePrestamo(): number;
-    abstract puedeRetirar(libro: any, duracion: number): void;
+    abstract puedeRetirar(libro: any): boolean;
     abstract devolver(libro: any): void;
     abstract tienePrestadoLibro(libro: any): any;
 
